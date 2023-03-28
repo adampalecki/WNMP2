@@ -61,18 +61,18 @@
 		});
 		
 		
-		let scenePark = new Potree.Scene();
-		let sceneRzezba = new Potree.Scene();
+		let sceneAll = new Potree.Scene();
+		let sceneInside = new Potree.Scene();
 		
-		viewer.setScene(scenePark);
+		viewer.setScene(sceneAll);
 		
 
 		
 		
 		
 		// 1. point cloud in scene 1
-		Potree.loadPointCloud("./pointclouds/all/metadata.json", "TLS_Zew", e => {
-			scenePark.addPointCloud(e.pointcloud);
+		Potree.loadPointCloud("./pointclouds/all/metadata.json", "Zewnetrze", e => {
+			sceneAll.addPointCloud(e.pointcloud);
 			viewer.fitToScreen();
 			
 			let material = e.pointcloud.material;
@@ -85,7 +85,7 @@
 				{
 					let elTitle = $(`
 						<span>
-							Rzezba 1
+							Srodek
 							<img src="${Potree.resourcePath}/icons/goto.svg" 
 								name="action_set_scene"
 								class="annotation-action-icon" 
@@ -94,9 +94,9 @@
 					`);
 					elTitle.find("img[name=action_set_scene]").click( (event) => {
 						event.stopPropagation();
-						viewer.setScene(sceneRzezba); 
+						viewer.setScene(sceneInside); 
 					});
-					elTitle.toString = () => "Rzezba 1";
+					elTitle.toString = () => "Kliknij aby wejść do środka";
 
 					let aAbout1 = new Potree.Annotation({
 						position: [78.714, 35.556, 1.094],
@@ -118,21 +118,25 @@
 		
 		
 		
-		// Rzezba in scene 2
-		Potree.loadPointCloud("./pointclouds/inside/metadata.json", "Rzezba 1", function(e){
-			sceneRzezba.addPointCloud(e.pointcloud);
-			sceneRzezba.view.position.set(108.697, -41.057, 49.642);
+		// Wnetrze in scene 2
+		Potree.loadPointCloud("./pointclouds/inside/metadata.json", "Srodek", function(e){
+			sceneInside.addPointCloud(e.pointcloud);
+			sceneInside.view.position.set(89.003, 5.780, 12.741);
 			e.pointcloud.material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 			
-			sceneRzezba.addAnnotation([79.653, 36.225, 2.011], {
-				"title": "Rzezba",
+			sceneInside.addAnnotation([79.653, 36.225, 2.011], {
+				"title": "Srodek",
 				"actions": [{
 					"icon": Potree.resourcePath + "/icons/goto.svg",
 					"onclick": function(){
-						viewer.setScene(scenePark);
+						viewer.setScene(sceneAll);
 					}
 				}]
 			});
+			
+			sceneInside.addAnnotation([99.452, 42.800, 8.281], {
+				"title": "Srodek"}
+			);
 		});
 		
 		
