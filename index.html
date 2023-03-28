@@ -73,7 +73,8 @@
 		// 1. point cloud in scene 1
 		Potree.loadPointCloud("./pointclouds/all/metadata.json", "Zewnetrze", e => {
 			sceneAll.addPointCloud(e.pointcloud);
-			viewer.fitToScreen();
+			sceneAll.view.position.set(84.083, -30.221, 36.566);
+			sceneAll.view.lookAt(93.092, 52.390, 23.545);
 			
 			let material = e.pointcloud.material;
 			material.size = 1;
@@ -85,7 +86,7 @@
 				{
 					let elTitle = $(`
 						<span>
-							Srodek
+							Środek
 							<img src="${Potree.resourcePath}/icons/goto.svg" 
 								name="action_set_scene"
 								class="annotation-action-icon" 
@@ -96,17 +97,17 @@
 						event.stopPropagation();
 						viewer.setScene(sceneInside); 
 					});
-					elTitle.toString = () => "Kliknij aby wejść do środka";
+					elTitle.toString = () => "Środek";
 
 					let aAbout1 = new Potree.Annotation({
 						position: [78.714, 35.556, 1.094],
 						title: elTitle,
 						cameraPosition: [68.160, 20.527, 3.197],
 						cameraTarget: [92.430, 47.341, -2.470],
-						description: `<ul><li>Click on the annotation label to move a predefined view.</li></ul>`
+						description: `<ul><li>Kliknij, aby przejść do środka</li></ul>`
 					});
 
-					scenePark.annotations.add(aAbout1);
+					sceneAll.annotations.add(aAbout1);
 				}
 				
 
@@ -121,11 +122,14 @@
 		// Wnetrze in scene 2
 		Potree.loadPointCloud("./pointclouds/inside/metadata.json", "Srodek", function(e){
 			sceneInside.addPointCloud(e.pointcloud);
-			sceneInside.view.position.set(89.003, 5.780, 12.741);
+			sceneInside.view.position.set(106.186, -9.458, 29.169);
+			sceneInside.view.lookAt(101.079, 47.391, 7.854);
 			e.pointcloud.material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 			
+		
+			
 			sceneInside.addAnnotation([79.653, 36.225, 2.011], {
-				"title": "Srodek",
+				"title": "Zewnetrze",
 				"actions": [{
 					"icon": Potree.resourcePath + "/icons/goto.svg",
 					"onclick": function(){
@@ -134,10 +138,84 @@
 				}]
 			});
 			
+			{
+				{
+			
+					let aAbout1 = new Potree.Annotation({
+						position: [99.501, 42.594, 8.244],
+						title: 'Punkt 1',
+						cameraPosition: [107.577, 36.855, 19.123],
+						cameraTarget: [99.046, 44.287, 5.585],
+						description: `<ul><li>Click on the annotation label to move a predefined view.</li></ul>`
+					});
+
+					sceneInside.annotations.add(aAbout1);
+				}
+				
+{
+			
+					let aAbout2 = new Potree.Annotation({
+						position: [111.687, 67.558, 7.734],
+						title: 'Punkt 2',
+						cameraPosition: [102.031, 63.097, 8.696],
+						cameraTarget: [110.575, 66.174, 7.306],
+						description: `<ul><li>Click on the annotation label to move a predefined view.</li></ul>`
+					});
+					aAbout2.domElement.on("mouseenter"); //TEN ELEMENT POZWALA NA WYŁĄCZENIE/WŁĄCZENIE OPISÓW NA STAŁE PO NAJECHANIU
+					aAbout2.domElement.off("mouseleave");
+					aAbout2.addEventListener("click", () => {
+						aAbout2.setHighlighted(!aAbout2.isHighlighted);
+					});
+					sceneInside.annotations.add(aAbout2);
+				}
+
+				//mozna dolaczac kolejne annotation
+	
+				{
+					let aAbout1 = new Potree.Annotation({
+						position: [99.081, 57.630, 20.910],
+						title: 'Punkt 3',
+						cameraPosition: [92.630, 67.326, 28.934],
+						cameraTarget: [101.575, 48.521, 8.798],
+						description: `<ul><li>Click on the annotation label to move a predefined view.</li></ul>
+						<iframe src="https://www.mapa.network/dashboard/snapshot/MfU4dusfqelvYVV2TjYKbJr60s3wPtS5" width="500" height="500" frameborder="0"></iframe></li>`
+					});
+
+					sceneInside.annotations.add(aAbout1);
+				}
+	
+	
+			}
+			
+
 
 		});
 		
-		
+	
+	{ // MEASUREMENTS
+				
+				{ // SINGLE POINT MEASURE
+					let measure = new Potree.Measure();
+					measure.name = "Czujnik 203/22";
+					measure.showDistances = false;
+					measure.showCoordinates = false;
+					measure.maxMarkers = 1;
+					measure.addMarker(new THREE.Vector3(99.455, 42.036, 8.099));
+					
+					sceneAll.addMeasurement(measure);
+				}
+				
+					{ // SINGLE POINT MEASURE
+					let measure = new Potree.Measure();
+					measure.name = "Czujnik 203/15";
+					measure.showDistances = false;
+					measure.showCoordinates = false;
+					measure.maxMarkers = 1;
+					measure.addMarker(new THREE.Vector3(113.180, 54.272, 4.203));
+					
+					sceneAll.addMeasurement(measure);
+				}
+	}
 		
 					
 	</script>
